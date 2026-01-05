@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070812" />
+  <title>Irek Halk | Links</title>
+
+  <style>
+    :root{
+      --bg0:#070812;
+      --bg1:#050613;
+
+      --text:#e9efff;
+      --muted: rgba(233,239,255,.72);
+
+      --glass: rgba(255,255,255,.06);
+      --glass2: rgba(255,255,255,.09);
+      --stroke: rgba(255,255,255,.14);
+
+      --c1:#00e5ff;
+      --c2:#ff2bd6;
+      --c3:#7cff6b;
+
+      --shadow: 0 26px 90px rgba(0,0,0,.62);
+
+      --r: 28px;
+      --r2: 22px;
+      --blur: 14px;
+    }
+
+    [data-theme="light"]{
+      --bg0:#f5f7ff;
+      --bg1:#eef2ff;
+
+      --text:#0c1020;
+      --muted: rgba(12,16,32,.70);
+
+      --glass: rgba(12,16,32,.06);
+      --glass2: rgba(12,16,32,.10);
+      --stroke: rgba(12,16,32,.14);
+
+      --shadow: 0 20px 64px rgba(12,16,32,.22);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 12% 18%, rgba(0,229,255,.16), transparent 60%),
+        radial-gradient(800px 540px at 88% 22%, rgba(255,43,214,.14), transparent 62%),
+        radial-gradient(900px 680px at 55% 88%, rgba(124,255,107,.10), transparent 64%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Lekkie "gwiazdy" bez animowania całego tła */
+    .stars{
+      position:fixed; inset:0;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.35), transparent 60%),
+        radial-gradient(1px 1px at 75% 18%, rgba(255,255,255,.30), transparent 60%),
+        radial-gradient(1px 1px at 62% 72%, rgba(255,255,255,.25), transparent 60%),
+        radial-gradient(1px 1px at 35% 78%, rgba(255,255,255,.22), transparent 60%),
+        radial-gradient(1px 1px at 88% 58%, rgba(255,255,255,.22), transparent 60%),
+        radial-gradient(1px 1px at 10% 62%, rgba(255,255,255,.18), transparent 60%),
+        radial-gradient(1px 1px at 52% 12%, rgba(255,255,255,.18), transparent 60%);
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    /* HUD lines – bardzo subtelne */
+    .hud{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity:.06;
+      pointer-events:none;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 26px 16px 34px;
+      position:relative;
+    }
+
+    /* Karta jak panel sci-fi */
+    .panel{
+      width: min(560px, 100%);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, var(--glass2), rgba(255,255,255,.03));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      overflow:hidden;
+      position:relative;
+      transform: translateZ(0); /* stabilizacja renderingu */
+    }
+
+    /* Ramka HUD + rogi */
+    .panel::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(600px 200px at 10% 0%, rgba(0,229,255,.16), transparent 60%),
+        radial-gradient(600px 220px at 90% 20%, rgba(255,43,214,.12), transparent 62%),
+        linear-gradient(90deg, rgba(0,229,255,.18), transparent 22%, transparent 78%, rgba(124,255,107,.12));
+      opacity:.9;
+      pointer-events:none;
+    }
+    .corners{
+      position:absolute; inset:0;
+      pointer-events:none;
+      opacity:.75;
+    }
+    .corner{
+      position:absolute;
+      width: 22px; height: 22px;
+      border: 2px solid rgba(255,255,255,.16);
+    }
+    .corner.tl{ left:14px; top:14px; border-right:none; border-bottom:none; border-top-left-radius:10px; }
+    .corner.tr{ right:14px; top:14px; border-left:none; border-bottom:none; border-top-right-radius:10px; }
+    .corner.bl{ left:14px; bottom:14px; border-right:none; border-top:none; border-bottom-left-radius:10px; }
+    .corner.br{ right:14px; bottom:14px; border-left:none; border-top:none; border-bottom-right-radius:10px; }
+
+    /* Pasek skanujący – animacja tylko wewnątrz panelu, lekka */
+    .scan{
+      position:absolute;
+      left:-30%; top:0;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.10) 50%, transparent 65%);
+      opacity:.35;
+      transform: skewX(-10deg);
+      animation: scan 3.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes scan{
+      0%{ transform: translateX(-40%) skewX(-10deg); opacity:.0; }
+      30%{ opacity:.35; }
+      60%{ opacity:.35; }
+      100%{ transform: translateX(260%) skewX(-10deg); opacity:0; }
+    }
+
+    .header{
+      padding: 20px 18px 14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .title{
+      margin:0;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing:.4px;
+      line-height:1.05;
+    }
+    .subtitle{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size: 14px;
+      line-height:1.35;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      border: 1px solid var(--stroke);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 13px;
+      cursor:pointer;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .chip::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(140px 60px at 30% 30%, rgba(0,229,255,.16), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .btnIcon{
+      width: 40px; height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      color: var(--text);
+      transition: transform .12s ease;
+    }
+    .btnIcon:active{ transform: scale(.98); }
+
+    .logoBox{
+      margin-top: 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      overflow:hidden;
+      position:relative;
+    }
+    .logoBox::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(520px 220px at 10% 30%, rgba(0,229,255,.16), transparent 60%),
+        radial-gradient(520px 220px at 90% 70%, rgba(255,43,214,.12), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .logoFrame{ padding: 10px 12px 12px; }
+    .logo{
+      width:100%;
+      height: 230px;
+      object-fit: contain;
+      display:block;
+      filter: drop-shadow(0 18px 34px rgba(0,0,0,.30));
+    }
+
+    .content{ padding: 12px 18px 16px; position:relative; z-index:2; }
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      margin: 12px 0 14px;
+    }
+
+    .view{ display:none; }
+    .view.active{ display:block; }
+
+    .list{ display:flex; flex-direction:column; gap:12px; }
+
+    /* Przyciski jako "sci-fi module" */
+    .linkBtn{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 16px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+      color: var(--text);
+      text-decoration:none;
+      box-shadow: 0 16px 52px rgba(0,0,0,.22);
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+    }
+
+    /* Neon edge + micro scan (bez trzęsienia) */
+    .linkBtn::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        linear-gradient(90deg, rgba(0,229,255,.16), transparent 26%, transparent 74%, rgba(255,43,214,.12));
+      opacity:.9;
+      pointer-events:none;
+    }
+    .linkBtn::after{
+      content:"";
+      position:absolute;
+      left:-40%;
+      top:0;
+      width: 40%;
+      height:100%;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.14) 50%, transparent 65%);
+      opacity:.22;
+      transform: skewX(-10deg);
+      animation: btnScan 4.6s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes btnScan{
+      0%{ transform: translateX(-35%) skewX(-10deg); opacity:0; }
+      25%{ opacity:.22; }
+      70%{ opacity:.22; }
+      100%{ transform: translateX(320%) skewX(-10deg); opacity:0; }
+    }
+
+    .left{ display:flex; align-items:center; gap:12px; z-index:1; }
+    .badge{
+      width:48px; height:48px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .label{ display:flex; flex-direction:column; gap:2px; }
+    .name{ font-weight: 950; letter-spacing:.3px; }
+    .desc{ font-size: 13px; color: var(--muted); }
+
+    .arrow{
+      width:46px; height:46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:center;
+      z-index:1;
+    }
+
+    /* Hover/active – bez przesuwania layoutu */
+    .linkBtn:active{ filter: brightness(1.03); }
+    .linkBtn:active .arrow{ transform: translateX(1px); }
+
+    /* Galeria */
+    .galleryGrid{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (min-width: 520px){ .galleryGrid{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+
+    .tile{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      overflow:hidden;
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 18px 60px rgba(0,0,0,.24);
+      cursor:pointer;
+    }
+    .tile img{
+      width:100%;
+      height: 150px;
+      object-fit: cover;
+      display:block;
+    }
+
+    .hint{
+      margin-top: 14px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.35;
+    }
+
+    .footer{
+      padding: 14px 18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color: var(--muted);
+      font-size: 12px;
+      position:relative;
+      z-index:2;
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 20px;
+      z-index: 50;
+    }
+    .lightbox.open{ display:flex; }
+    .lbCard{
+      width:min(920px, 100%);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(10,12,24,.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 22px 80px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    [data-theme="light"] .lbCard{
+      background: rgba(255,255,255,.74);
+      border-color: rgba(12,16,32,.14);
+    }
+    .lbImg{
+      width:100%;
+      max-height: 75vh;
+      object-fit: contain;
+      display:block;
+      background: rgba(0,0,0,.22);
+    }
+    .lbBar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,.14);
+      color: var(--text);
+    }
+    .lbBar small{ color: var(--muted); }
+    .miniBtn{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+    }
+    [data-theme="light"] .miniBtn{
+      background: rgba(12,16,32,.06);
+      border-color: rgba(12,16,32,.14);
+    }
+
+    /* Stabilizacja: żadnych animacji na całym body */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition:none !important; }
+    }
+  </style>
+</head>
+
+<body data-theme="dark">
+  <div class="stars"></div>
+  <div class="hud"></div>
+
+  <div class="wrap">
+    <div class="panel">
+      <div class="scan"></div>
+
+      <div class="corners">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+      </div>
+
+      <div class="header">
+        <div class="topRow">
+          <div>
+            <h1 class="title">Irek Halk</h1>
+            <p class="subtitle" id="subtitle">Wähle eine Plattform oder öffne die Galerie.</p>
+          </div>
+
+          <div class="controls">
+            <span class="chip" id="langChip"><span id="langLabel">Deutsch</span></span>
+
+            <button class="btnIcon" id="themeBtn" aria-label="Theme wechseln" title="Dark/Light">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M21 12.2A8.2 8.2 0 1 1 11.8 3a6.7 6.7 0 0 0 9.2 9.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="logoBox">
+          <div class="logoFrame">
+            <img class="logo" src="logo.png" alt="Logo" />
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="divider"></div>
+
+        <div class="view active" id="viewLinks">
+          <div class="list">
+            <a class="linkBtn" id="btnIG" href="#" rel="noopener" target="_blank">
+              <span class="left">
+                <span class="badge" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M7.3 2.8h9.4a4.9 4.9 0 0 1 4.9 4.9v9.4a4.9 4.9 0 0 1-4.9 4.9H7.3a4.9 4.9 0 0 1-4.9-4.9V7.7a4.9 4.9 0 0 1 4.9-4.9Z" stroke="currentColor" stroke-width="1.9"/>
+                    <path d="M12 16.1a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z" stroke="currentColor" stroke-width="1.9"/>
+                    <path d="M17.6 6.6h.01" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="label">
+                  <span class="name">Instagram</span>
+                  <span class="desc" id="igDesc">Portfolio & Updates</span>
+                </span>
+              </span>
+              <span class="arrow" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </a>
+
+            <a class="linkBtn" id="btnTT" href="#" rel="noopener" target="_blank">
+              <span class="left">
+                <span class="badge" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M14 3v11.4a4.6 4.6 0 1 1-3.4-4.4" stroke="currentColor" stroke-width="2.0" stroke-linecap="round"/>
+                    <path d="M14 6.1c1.3 2.3 3.6 3.9 6.2 4.2" stroke="currentColor" stroke-width="2.0" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="label">
+                  <span class="name">TikTok</span>
+                  <span class="desc" id="ttDesc">Werkstatt & Behind the Scenes</span>
+                </span>
+              </span>
+              <span class="arrow" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </a>
+
+            <a class="linkBtn" id="btnYT" href="#" rel="noopener" target="_blank">
+              <span class="left">
+                <span class="badge" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 12s0-3.6-.4-5.1a3.1 3.1 0 0 0-2.1-2.2C16.6 4.2 12 4.2 12 4.2s-4.6 0-6.5.5a3.1 3.1 0 0 0-2.1 2.2C3 8.4 3 12 3 12s0 3.6.4 5.1a3.1 3.1 0 0 0 2.1 2.2c1.9.5 6.5.5 6.5.5s4.6 0 6.5-.5a3.1 3.1 0 0 0 2.1-2.2c.4-1.5.4-5.1.4-5.1Z"
+                          stroke="currentColor" stroke-width="1.7"/>
+                    <path d="M10.2 15.2V8.8l5.6 3.2-5.6 3.2Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="label">
+                  <span class="name">YouTube</span>
+                  <span class="desc" id="ytDesc">Videos & Projekte</span>
+                </span>
+              </span>
+              <span class="arrow" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </a>
+
+            <button class="linkBtn" id="btnGallery" type="button">
+              <span class="left">
+                <span class="badge" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 6a2.1 2.1 0 0 1 2.1-2.1h11.8A2.1 2.1 0 0 1 20 6v12a2.1 2.1 0 0 1-2.1 2.1H6.1A2.1 2.1 0 0 1 4 18V6Z" stroke="currentColor" stroke-width="2.0"/>
+                    <path d="M8 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="currentColor" opacity=".9"/>
+                    <path d="M21 16l-6-6-6 6-2-2-3 3" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="label">
+                  <span class="name" id="galName">Galerie</span>
+                  <span class="desc" id="galDesc">Fotos & Arbeiten</span>
+                </span>
+              </span>
+              <span class="arrow" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+          <div class="hint" id="hint">
+            Tipp: Wenn du diese Seite in Instagram/TikTok/YouTube öffnest und ein Link nicht funktioniert,
+            nutze das Menü (⋮) → „Im Browser öffnen“.
+          </div>
+        </div>
+
+        <div class="view" id="viewGallery">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="font-weight:950; letter-spacing:.3px; font-size:16px;" id="galleryTitle">Galerie</div>
+              <div style="color:var(--muted); font-size:12px; margin-top:4px;" id="gallerySub">Tippe auf ein Bild für Vollansicht.</div>
+            </div>
+            <button class="miniBtn" id="backBtn" type="button">Zurück</button>
+          </div>
+
+          <div class="galleryGrid" id="galleryGrid"></div>
+
+          <div class="hint" id="hint2" style="margin-top:14px;">
+            Tipp: Wenn Bilder nicht laden, prüfe die Dateinamen (Groß/Kleinschreibung) und den Ordner „gallery/“.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>© <span id="year"></span> Irek Halk</span>
+        <span>Science-Fiction UI</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lbCard">
+      <img class="lbImg" id="lbImg" alt="Bild" />
+      <div class="lbBar">
+        <small id="lbLabel">Bild</small>
+        <div style="display:flex; gap:8px;">
+          <button class="miniBtn" id="lbPrev" type="button">◀</button>
+          <button class="miniBtn" id="lbNext" type="button">▶</button>
+          <button class="miniBtn" id="lbClose" type="button">Schließen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LINKS = {
+      instagram: "https://www.instagram.com/ixdesign.studio?igsh=Y3d4YW5ndjNlcWo5",
+      tiktok: "https://www.tiktok.com/@ixdesignhh?_r=1&_t=ZG-92nsSinWzhp",
+      youtube: "https://youtube.com/@patrykvega-g7d?si=qumMPur4GXNsvgYY"
+    };
+
+    const GALLERY = [
+      "gallery/01.jpg",
+      "gallery/02.jpg",
+      "gallery/03.jpg",
+      "gallery/04.jpg",
+      "gallery/05.jpg",
+      "gallery/06.jpg"
+    ];
+
+    const I18N = {
+      de: {
+        langLabel: "Deutsch",
+        subtitle: "Wähle eine Plattform oder öffne die Galerie.",
+        igDesc: "Portfolio & Updates",
+        ttDesc: "Werkstatt & Behind the Scenes",
+        ytDesc: "Videos & Projekte",
+        galName: "Galerie",
+        galDesc: "Fotos & Arbeiten",
+        hint: "Tipp: Wenn du diese Seite in Instagram/TikTok/YouTube öffnest und ein Link nicht funktioniert, nutze das Menü (⋮) → „Im Browser öffnen“.",
+        galleryTitle: "Galerie",
+        gallerySub: "Tippe auf ein Bild für Vollansicht.",
+        back: "Zurück",
+        hint2: "Tipp: Wenn Bilder nicht laden, prüfe die Dateinamen (Groß/Kleinschreibung) und den Ordner „gallery/“.",
+        close: "Schließen"
+      },
+      pl: {
+        langLabel: "Polski",
+        subtitle: "Wybierz platformę albo otwórz galerię.",
+        igDesc: "Portfolio i aktualizacje",
+        ttDesc: "Warsztat i backstage",
+        ytDesc: "Filmy i projekty",
+        galName: "Galeria",
+        galDesc: "Zdjęcia i realizacje",
+        hint: "Tip: Jeśli otwierasz stronę w Instagramie/TikToku/YouTube i link nie działa, użyj menu (⋮) → „Otwórz w przeglądarce”.",
+        galleryTitle: "Galeria",
+        gallerySub: "Kliknij zdjęcie, aby otworzyć podgląd.",
+        back: "Wróć",
+        hint2: "Tip: Jeśli zdjęcia się nie ładują, sprawdź nazwy plików (wielkość liter) i folder „gallery/”.",
+        close: "Zamknij"
+      },
+      en: {
+        langLabel: "English",
+        subtitle: "Choose a platform or open the gallery.",
+        igDesc: "Portfolio & updates",
+        ttDesc: "Workshop & behind the scenes",
+        ytDesc: "Videos & projects",
+        galName: "Gallery",
+        galDesc: "Photos & works",
+        hint: "Tip: If you open this page inside Instagram/TikTok/YouTube and a link doesn’t work, use the menu (⋮) → “Open in browser”.",
+        galleryTitle: "Gallery",
+        gallerySub: "Tap an image for full view.",
+        back: "Back",
+        hint2: "Tip: If images don’t load, check filename casing and the “gallery/” folder.",
+        close: "Close"
+      }
+    };
+
+    const $ = (s)=>document.querySelector(s);
+    $("#year").textContent = new Date().getFullYear();
+
+    $("#btnIG").href = LINKS.instagram;
+    $("#btnTT").href = LINKS.tiktok;
+    $("#btnYT").href = LINKS.youtube;
+
+    // Theme
+    const root = document.body;
+    const savedTheme = localStorage.getItem("theme");
+    if(savedTheme) root.setAttribute("data-theme", savedTheme);
+    $("#themeBtn").addEventListener("click", ()=>{
+      const cur = root.getAttribute("data-theme") || "dark";
+      const next = cur === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+    });
+
+    // Language default DE
+    let lang = localStorage.getItem("lang") || "de";
+    applyLang(lang);
+
+    $("#langChip").addEventListener("click", ()=>{
+      lang = (lang === "de") ? "pl" : (lang === "pl" ? "en" : "de");
+      localStorage.setItem("lang", lang);
+      applyLang(lang);
+    });
+
+    function applyLang(k){
+      const t = I18N[k] || I18N.de;
+      $("#langLabel").textContent = t.langLabel;
+      $("#subtitle").textContent = t.subtitle;
+      $("#igDesc").textContent = t.igDesc;
+      $("#ttDesc").textContent = t.ttDesc;
+      $("#ytDesc").textContent = t.ytDesc;
+      $("#galName").textContent = t.galName;
+      $("#galDesc").textContent = t.galDesc;
+      $("#hint").textContent = t.hint;
+      $("#galleryTitle").textContent = t.galleryTitle;
+      $("#gallerySub").textContent = t.gallerySub;
+      $("#backBtn").textContent = t.back;
+      $("#hint2").textContent = t.hint2;
+      $("#lbClose").textContent = t.close;
+      document.documentElement.lang = k;
+    }
+
+    // Views
+    const viewLinks = $("#viewLinks");
+    const viewGallery = $("#viewGallery");
+    $("#btnGallery").addEventListener("click", ()=>{
+      viewLinks.classList.remove("active");
+      viewGallery.classList.add("active");
+    });
+    $("#backBtn").addEventListener("click", ()=>{
+      viewGallery.classList.remove("active");
+      viewLinks.classList.add("active");
+    });
+
+    // Gallery build
+    const grid = $("#galleryGrid");
+    let currentIdx = 0;
+    GALLERY.forEach((src, i)=>{
+      const div = document.createElement("div");
+      div.className = "tile";
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.src = src;
+      img.alt = "Gallery " + (i+1);
+      div.appendChild(img);
+      div.addEventListener("click", ()=>openLightbox(i));
+      grid.appendChild(div);
+    });
+
+    // Lightbox
+    const lightbox = $("#lightbox");
+    const lbImg = $("#lbImg");
+    const lbLabel = $("#lbLabel");
+    $("#lbClose").addEventListener("click", closeLightbox);
+    $("#lbPrev").addEventListener("click", ()=>openLightbox((currentIdx-1+GALLERY.length)%GALLERY.length));
+    $("#lbNext").addEventListener("click", ()=>openLightbox((currentIdx+1)%GALLERY.length));
+    lightbox.addEventListener("click", (e)=>{ if(e.target === lightbox) closeLightbox(); });
+
+    function openLightbox(i){
+      currentIdx = i;
+      lbImg.src = GALLERY[i];
+      lbLabel.textContent = `${i+1} / ${GALLERY.length}`;
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+    }
+    function closeLightbox(){
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+    }
+  </script>
+</body>
+</html>
