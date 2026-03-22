@@ -3,775 +3,326 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#070812" />
-  <title>Irek Halk | Links</title>
+  <title>IX Design Hamburg | Cyber Hub</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&family=JetBrains+Mono:wght@400&family=Syncopate:wght@700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --bg0:#070812;
-      --bg1:#050613;
-
-      --text:#e9efff;
-      --muted: rgba(233,239,255,.72);
-
-      --glass: rgba(255,255,255,.06);
-      --glass2: rgba(255,255,255,.09);
-      --stroke: rgba(255,255,255,.14);
-
-      --c1:#00e5ff;
-      --c2:#ff2bd6;
-      --c3:#7cff6b;
-
-      --shadow: 0 26px 90px rgba(0,0,0,.62);
-
-      --r: 28px;
-      --r2: 22px;
-      --blur: 14px;
+    :root {
+      --p: #00f2ff; 
+      --s: #ff00c8; 
+      --bg: #030408;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-brand: 'Syncopate', sans-serif;
     }
 
-    [data-theme="light"]{
-      --bg0:#f5f7ff;
-      --bg1:#eef2ff;
-
-      --text:#0c1020;
-      --muted: rgba(12,16,32,.70);
-
-      --glass: rgba(12,16,32,.06);
-      --glass2: rgba(12,16,32,.10);
-      --stroke: rgba(12,16,32,.14);
-
-      --shadow: 0 20px 64px rgba(12,16,32,.22);
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body, html {
+      margin: 0; padding: 0; background: var(--bg);
+      color: #fff; font-family: var(--font-main);
+      overflow-x: hidden; min-height: 100vh;
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--text);
-      background:
-        radial-gradient(900px 600px at 12% 18%, rgba(0,229,255,.16), transparent 60%),
-        radial-gradient(800px 540px at 88% 22%, rgba(255,43,214,.14), transparent 62%),
-        radial-gradient(900px 680px at 55% 88%, rgba(124,255,107,.10), transparent 64%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-      -webkit-tap-highlight-color: transparent;
+    /* --- DYNAMIC ROBOT QR INTRO --- */
+    #intro-robot {
+      position: fixed; inset: 0; background: #000; z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.8s cubic-bezier(0.9, 0, 0.1, 1);
+    }
+    .robot {
+      position: relative; width: 220px; height: 300px;
+      display: flex; flex-direction: column; align-items: center;
+      perspective: 1200px;
+    }
+    .robot-head {
+      width: 130px; height: 90px; background: #1a1a1a; border: 3px solid var(--p);
+      border-radius: 20px; position: relative; margin-bottom: 15px;
+      box-shadow: 0 0 30px rgba(0,242,255,0.4); animation: robotFloat 3s infinite ease-in-out;
+    }
+    .eyes { display: flex; gap: 20px; justify-content: center; margin-top: 30px; }
+    .eye { width: 18px; height: 18px; background: var(--p); border-radius: 50%; box-shadow: 0 0 15px var(--p); animation: blink 4s infinite; }
+    
+    .robot-body {
+      width: 180px; height: 150px; background: #1a1a1a; border: 3px solid var(--p);
+      border-radius: 30px; position: relative; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 30px rgba(0,242,255,0.2);
+    }
+    .qr-container { position: relative; width: 100px; height: 100px; transform-style: preserve-3d; }
+    .qr-ring {
+      position: absolute; inset: -15px; border: 2px solid var(--s); border-radius: 50%;
+      border-top-color: transparent; animation: rotateRing 1.5s infinite linear;
+    }
+    .qr-screen {
+      width: 100%; height: 100%; background: #fff; padding: 10px; border-radius: 10px;
+      animation: qrPulse 1.5s infinite alternate;
+    }
+    .qr-screen svg { width: 100%; height: 100%; fill: #000; }
+    .scanner-line {
+      position: absolute; width: 100%; height: 3px; background: var(--p);
+      top: 50%; left: 0; box-shadow: 0 0 20px var(--p); animation: scanMove 2s infinite ease-in-out;
     }
 
-    /* Lekkie "gwiazdy" bez animowania całego tła */
-    .stars{
-      position:fixed; inset:0;
-      background-image:
-        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.35), transparent 60%),
-        radial-gradient(1px 1px at 75% 18%, rgba(255,255,255,.30), transparent 60%),
-        radial-gradient(1px 1px at 62% 72%, rgba(255,255,255,.25), transparent 60%),
-        radial-gradient(1px 1px at 35% 78%, rgba(255,255,255,.22), transparent 60%),
-        radial-gradient(1px 1px at 88% 58%, rgba(255,255,255,.22), transparent 60%),
-        radial-gradient(1px 1px at 10% 62%, rgba(255,255,255,.18), transparent 60%),
-        radial-gradient(1px 1px at 52% 12%, rgba(255,255,255,.18), transparent 60%);
-      opacity:.45;
-      pointer-events:none;
-    }
+    @keyframes rotateRing { to { transform: rotate(360deg); } }
+    @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0); } }
+    @keyframes qrPulse { from { transform: scale(0.9); } to { transform: scale(1.1); } }
+    @keyframes scanMove { 0% { top: 10%; } 100% { top: 90%; } }
 
-    /* HUD lines – bardzo subtelne */
-    .hud{
-      position:fixed; inset:0;
-      background:
-        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size: 80px 80px;
-      opacity:.06;
-      pointer-events:none;
-    }
+    .robot-open #intro-robot { opacity: 0; visibility: hidden; transform: scale(1.5); filter: blur(20px); }
 
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 26px 16px 34px;
-      position:relative;
-    }
+    /* --- LAYOUT --- */
+    .bg-web { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #12172b 0%, #030408 100%); }
+    
+    .lang-switcher { position: fixed; top: 20px; right: 20px; z-index: 5000; display: flex; gap: 10px; }
+    .lang-btn { background: var(--glass); border: 1px solid var(--glass-border); color: #fff; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 800; backdrop-filter: blur(10px); }
+    .lang-btn.active { background: var(--p); color: #000; border-color: var(--p); box-shadow: 0 0 15px var(--p); }
 
-    /* Karta jak panel sci-fi */
-    .panel{
-      width: min(560px, 100%);
-      border-radius: var(--r);
-      background: linear-gradient(180deg, var(--glass2), rgba(255,255,255,.03));
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
-      overflow:hidden;
-      position:relative;
-      transform: translateZ(0); /* stabilizacja renderingu */
-    }
+    .app-container { max-width: 600px; margin: 0 auto; padding: 0 0 60px 0; opacity: 0; transform: translateY(30px); transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .loaded .app-container { opacity: 1; transform: translateY(0); }
 
-    /* Ramka HUD + rogi */
-    .panel::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(600px 200px at 10% 0%, rgba(0,229,255,.16), transparent 60%),
-        radial-gradient(600px 220px at 90% 20%, rgba(255,43,214,.12), transparent 62%),
-        linear-gradient(90deg, rgba(0,229,255,.18), transparent 22%, transparent 78%, rgba(124,255,107,.12));
-      opacity:.9;
-      pointer-events:none;
-    }
-    .corners{
-      position:absolute; inset:0;
-      pointer-events:none;
-      opacity:.75;
-    }
-    .corner{
-      position:absolute;
-      width: 22px; height: 22px;
-      border: 2px solid rgba(255,255,255,.16);
-    }
-    .corner.tl{ left:14px; top:14px; border-right:none; border-bottom:none; border-top-left-radius:10px; }
-    .corner.tr{ right:14px; top:14px; border-left:none; border-bottom:none; border-top-right-radius:10px; }
-    .corner.bl{ left:14px; bottom:14px; border-right:none; border-top:none; border-bottom-left-radius:10px; }
-    .corner.br{ right:14px; bottom:14px; border-left:none; border-top:none; border-bottom-right-radius:10px; }
+    /* BANNER */
+    .full-banner { width: 100%; margin: 0; border-bottom: 1px solid var(--glass-border); background: #000; }
+    .full-banner img { width: 100%; height: auto; display: block; }
 
-    /* Pasek skanujący – animacja tylko wewnątrz panelu, lekka */
-    .scan{
-      position:absolute;
-      left:-30%; top:0;
-      width: 55%;
-      height: 100%;
-      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.10) 50%, transparent 65%);
-      opacity:.35;
-      transform: skewX(-10deg);
-      animation: scan 3.8s ease-in-out infinite;
-      pointer-events:none;
-    }
-    @keyframes scan{
-      0%{ transform: translateX(-40%) skewX(-10deg); opacity:.0; }
-      30%{ opacity:.35; }
-      60%{ opacity:.35; }
-      100%{ transform: translateX(260%) skewX(-10deg); opacity:0; }
-    }
+    header { text-align: center; padding: 20px 20px 0; }
+    h1 { font-family: var(--font-brand); font-size: 22px; margin: 15px 0; letter-spacing: 2px; background: linear-gradient(to right, #fff, var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .header{
-      padding: 20px 18px 14px;
-      position:relative;
-      z-index:2;
+    /* SOCIAL BAR - BIGGER ICONS */
+    .social-bar { display: flex; justify-content: center; gap: 20px; margin: 30px 0; }
+    .social-icon {
+      width: 62px; height: 62px; border-radius: 18px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: center; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .social-icon svg { width: 30px; height: 30px; fill: white; }
+    .social-icon:hover { background: var(--p); border-color: var(--p); transform: translateY(-6px) rotate(5deg); box-shadow: 0 10px 25px rgba(0,242,255,0.4); }
+    .social-icon:hover svg { fill: black; }
 
-    .topRow{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
+    /* CONTACT SECTION */
+    .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 20px; margin-bottom: 40px; }
+    .contact-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 15px 10px; text-align: center;
+      text-decoration: none; color: #fff; transition: 0.3s;
     }
+    .contact-card i { font-size: 20px; color: var(--p); display: block; margin-bottom: 8px; }
+    .contact-card span { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--p); }
+    .contact-card div { font-size: 11px; margin-top: 5px; opacity: 0.7; word-break: break-all; }
+    .contact-card:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--p); transform: scale(1.05); }
 
-    .title{
-      margin:0;
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing:.4px;
-      line-height:1.05;
-    }
-    .subtitle{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size: 14px;
-      line-height:1.35;
-    }
+    /* SERVICES */
+    .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 4px; color: var(--p); margin: 0 20px 15px; display: block; font-family: 'JetBrains Mono'; }
+    .services-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
+    .service-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; transition: 0.4s ease; }
+    .service-header { padding: 24px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .service-header h3 { font-size: 16px; margin: 0; font-weight: 800; }
+    .service-header .arrow { color: var(--p); transition: 0.4s; font-family: monospace; }
+    .service-content { max-height: 0; overflow: hidden; transition: all 0.5s ease; padding: 0 24px; }
+    .service-item.active { border-color: var(--p); background: rgba(255,255,255,0.08); }
+    .service-item.active .arrow { transform: rotate(180deg); color: var(--s); }
+    .service-item.active .service-content { max-height: 1200px; padding-bottom: 30px; }
+    .service-desc { font-size: 14px; line-height: 1.6; color: #ccc; margin-bottom: 20px; }
+    .service-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .gallery-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 15px; border: 1px solid var(--glass-border); cursor: pointer; }
 
-    .controls{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:flex-end;
-      flex-wrap:wrap;
-    }
+    #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 20000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+    #lightbox img { max-width: 90%; max-height: 80vh; border-radius: 12px; border: 1px solid var(--p); }
 
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
-      border: 1px solid var(--stroke);
-      color: var(--text);
-      font-weight: 800;
-      font-size: 13px;
-      cursor:pointer;
-      user-select:none;
-      position:relative;
-      overflow:hidden;
-    }
-    .chip::after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(140px 60px at 30% 30%, rgba(0,229,255,.16), transparent 60%);
-      opacity:.9;
-      pointer-events:none;
-    }
-
-    .btnIcon{
-      width: 40px; height: 40px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      color: var(--text);
-      transition: transform .12s ease;
-    }
-    .btnIcon:active{ transform: scale(.98); }
-
-    .logoBox{
-      margin-top: 14px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.16);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-      overflow:hidden;
-      position:relative;
-    }
-    .logoBox::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(520px 220px at 10% 30%, rgba(0,229,255,.16), transparent 60%),
-        radial-gradient(520px 220px at 90% 70%, rgba(255,43,214,.12), transparent 60%);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .logoFrame{ padding: 10px 12px 12px; }
-    .logo{
-      width:100%;
-      height: 230px;
-      object-fit: contain;
-      display:block;
-      filter: drop-shadow(0 18px 34px rgba(0,0,0,.30));
-    }
-
-    .content{ padding: 12px 18px 16px; position:relative; z-index:2; }
-    .divider{
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-      margin: 12px 0 14px;
-    }
-
-    .view{ display:none; }
-    .view.active{ display:block; }
-
-    .list{ display:flex; flex-direction:column; gap:12px; }
-
-    /* Przyciski jako "sci-fi module" */
-    .linkBtn{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 16px 16px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
-      color: var(--text);
-      text-decoration:none;
-      box-shadow: 0 16px 52px rgba(0,0,0,.22);
-      position:relative;
-      overflow:hidden;
-      transform: translateZ(0);
-    }
-
-    /* Neon edge + micro scan (bez trzęsienia) */
-    .linkBtn::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        linear-gradient(90deg, rgba(0,229,255,.16), transparent 26%, transparent 74%, rgba(255,43,214,.12));
-      opacity:.9;
-      pointer-events:none;
-    }
-    .linkBtn::after{
-      content:"";
-      position:absolute;
-      left:-40%;
-      top:0;
-      width: 40%;
-      height:100%;
-      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.14) 50%, transparent 65%);
-      opacity:.22;
-      transform: skewX(-10deg);
-      animation: btnScan 4.6s ease-in-out infinite;
-      pointer-events:none;
-    }
-    @keyframes btnScan{
-      0%{ transform: translateX(-35%) skewX(-10deg); opacity:0; }
-      25%{ opacity:.22; }
-      70%{ opacity:.22; }
-      100%{ transform: translateX(320%) skewX(-10deg); opacity:0; }
-    }
-
-    .left{ display:flex; align-items:center; gap:12px; z-index:1; }
-    .badge{
-      width:48px; height:48px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .label{ display:flex; flex-direction:column; gap:2px; }
-    .name{ font-weight: 950; letter-spacing:.3px; }
-    .desc{ font-size: 13px; color: var(--muted); }
-
-    .arrow{
-      width:46px; height:46px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      display:flex; align-items:center; justify-content:center;
-      z-index:1;
-    }
-
-    /* Hover/active – bez przesuwania layoutu */
-    .linkBtn:active{ filter: brightness(1.03); }
-    .linkBtn:active .arrow{ transform: translateX(1px); }
-
-    /* Galeria */
-    .galleryGrid{
-      margin-top: 12px;
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:12px;
-    }
-    @media (min-width: 520px){ .galleryGrid{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
-
-    .tile{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.16);
-      overflow:hidden;
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 18px 60px rgba(0,0,0,.24);
-      cursor:pointer;
-    }
-    .tile img{
-      width:100%;
-      height: 150px;
-      object-fit: cover;
-      display:block;
-    }
-
-    .hint{
-      margin-top: 14px;
-      padding: 12px 12px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      color: var(--muted);
-      font-size: 12px;
-      line-height:1.35;
-    }
-
-    .footer{
-      padding: 14px 18px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      color: var(--muted);
-      font-size: 12px;
-      position:relative;
-      z-index:2;
-    }
-
-    /* Lightbox */
-    .lightbox{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.72);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 20px;
-      z-index: 50;
-    }
-    .lightbox.open{ display:flex; }
-    .lbCard{
-      width:min(920px, 100%);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(10,12,24,.55);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 22px 80px rgba(0,0,0,.55);
-      overflow:hidden;
-    }
-    [data-theme="light"] .lbCard{
-      background: rgba(255,255,255,.74);
-      border-color: rgba(12,16,32,.14);
-    }
-    .lbImg{
-      width:100%;
-      max-height: 75vh;
-      object-fit: contain;
-      display:block;
-      background: rgba(0,0,0,.22);
-    }
-    .lbBar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 12px;
-      border-top: 1px solid rgba(255,255,255,.14);
-      color: var(--text);
-    }
-    .lbBar small{ color: var(--muted); }
-    .miniBtn{
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
-    }
-    [data-theme="light"] .miniBtn{
-      background: rgba(12,16,32,.06);
-      border-color: rgba(12,16,32,.14);
-    }
-
-    /* Stabilizacja: żadnych animacji na całym body */
-    @media (prefers-reduced-motion: reduce){
-      *{ animation: none !important; transition:none !important; }
-    }
+    footer { text-align: center; margin-top: 50px; font-size: 9px; opacity: 0.3; font-family: 'JetBrains Mono'; padding-bottom: 40px; }
   </style>
 </head>
+<body class="lang-de">
 
-<body data-theme="dark">
-  <div class="stars"></div>
-  <div class="hud"></div>
-
-  <div class="wrap">
-    <div class="panel">
-      <div class="scan"></div>
-
-      <div class="corners">
-        <div class="corner tl"></div><div class="corner tr"></div>
-        <div class="corner bl"></div><div class="corner br"></div>
+  <!-- Robot Intro -->
+  <div id="intro-robot">
+    <div class="robot">
+      <div class="robot-head">
+        <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
       </div>
-
-      <div class="header">
-        <div class="topRow">
-          <div>
-            <h1 class="title">Irek Halk</h1>
-            <p class="subtitle" id="subtitle">Wähle eine Plattform oder öffne die Galerie.</p>
-          </div>
-
-          <div class="controls">
-            <span class="chip" id="langChip"><span id="langLabel">Deutsch</span></span>
-
-            <button class="btnIcon" id="themeBtn" aria-label="Theme wechseln" title="Dark/Light">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M21 12.2A8.2 8.2 0 1 1 11.8 3a6.7 6.7 0 0 0 9.2 9.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+      <div class="robot-body">
+        <div class="qr-container">
+          <div class="qr-ring"></div>
+          <div class="qr-screen">
+            <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zM13 13h2v2h-2v-2zm0 3h2v2h-2v-2zm0 3h2v2h-2v-2z"/></svg>
           </div>
         </div>
-
-        <div class="logoBox">
-          <div class="logoFrame">
-            <img class="logo" src="logo.png" alt="Logo" />
-          </div>
-        </div>
+        <div class="scanner-line"></div>
       </div>
-
-      <div class="content">
-        <div class="divider"></div>
-
-        <div class="view active" id="viewLinks">
-          <div class="list">
-            <a class="linkBtn" id="btnIG" href="#" rel="noopener" target="_blank">
-              <span class="left">
-                <span class="badge" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M7.3 2.8h9.4a4.9 4.9 0 0 1 4.9 4.9v9.4a4.9 4.9 0 0 1-4.9 4.9H7.3a4.9 4.9 0 0 1-4.9-4.9V7.7a4.9 4.9 0 0 1 4.9-4.9Z" stroke="currentColor" stroke-width="1.9"/>
-                    <path d="M12 16.1a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2Z" stroke="currentColor" stroke-width="1.9"/>
-                    <path d="M17.6 6.6h.01" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
-                  </svg>
-                </span>
-                <span class="label">
-                  <span class="name">Instagram</span>
-                  <span class="desc" id="igDesc">Portfolio & Updates</span>
-                </span>
-              </span>
-              <span class="arrow" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </a>
-
-            <a class="linkBtn" id="btnTT" href="#" rel="noopener" target="_blank">
-              <span class="left">
-                <span class="badge" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M14 3v11.4a4.6 4.6 0 1 1-3.4-4.4" stroke="currentColor" stroke-width="2.0" stroke-linecap="round"/>
-                    <path d="M14 6.1c1.3 2.3 3.6 3.9 6.2 4.2" stroke="currentColor" stroke-width="2.0" stroke-linecap="round"/>
-                  </svg>
-                </span>
-                <span class="label">
-                  <span class="name">TikTok</span>
-                  <span class="desc" id="ttDesc">Werkstatt & Behind the Scenes</span>
-                </span>
-              </span>
-              <span class="arrow" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </a>
-
-            <a class="linkBtn" id="btnYT" href="#" rel="noopener" target="_blank">
-              <span class="left">
-                <span class="badge" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 12s0-3.6-.4-5.1a3.1 3.1 0 0 0-2.1-2.2C16.6 4.2 12 4.2 12 4.2s-4.6 0-6.5.5a3.1 3.1 0 0 0-2.1 2.2C3 8.4 3 12 3 12s0 3.6.4 5.1a3.1 3.1 0 0 0 2.1 2.2c1.9.5 6.5.5 6.5.5s4.6 0 6.5-.5a3.1 3.1 0 0 0 2.1-2.2c.4-1.5.4-5.1.4-5.1Z"
-                          stroke="currentColor" stroke-width="1.7"/>
-                    <path d="M10.2 15.2V8.8l5.6 3.2-5.6 3.2Z" fill="currentColor"/>
-                  </svg>
-                </span>
-                <span class="label">
-                  <span class="name">YouTube</span>
-                  <span class="desc" id="ytDesc">Videos & Projekte</span>
-                </span>
-              </span>
-              <span class="arrow" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </a>
-
-            <button class="linkBtn" id="btnGallery" type="button">
-              <span class="left">
-                <span class="badge" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M4 6a2.1 2.1 0 0 1 2.1-2.1h11.8A2.1 2.1 0 0 1 20 6v12a2.1 2.1 0 0 1-2.1 2.1H6.1A2.1 2.1 0 0 1 4 18V6Z" stroke="currentColor" stroke-width="2.0"/>
-                    <path d="M8 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="currentColor" opacity=".9"/>
-                    <path d="M21 16l-6-6-6 6-2-2-3 3" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <span class="label">
-                  <span class="name" id="galName">Galerie</span>
-                  <span class="desc" id="galDesc">Fotos & Arbeiten</span>
-                </span>
-              </span>
-              <span class="arrow" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </button>
-          </div>
-
-          <div class="hint" id="hint">
-            Tipp: Wenn du diese Seite in Instagram/TikTok/YouTube öffnest und ein Link nicht funktioniert,
-            nutze das Menü (⋮) → „Im Browser öffnen“.
-          </div>
-        </div>
-
-        <div class="view" id="viewGallery">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-            <div>
-              <div style="font-weight:950; letter-spacing:.3px; font-size:16px;" id="galleryTitle">Galerie</div>
-              <div style="color:var(--muted); font-size:12px; margin-top:4px;" id="gallerySub">Tippe auf ein Bild für Vollansicht.</div>
-            </div>
-            <button class="miniBtn" id="backBtn" type="button">Zurück</button>
-          </div>
-
-          <div class="galleryGrid" id="galleryGrid"></div>
-
-          <div class="hint" id="hint2" style="margin-top:14px;">
-            Tipp: Wenn Bilder nicht laden, prüfe die Dateinamen (Groß/Kleinschreibung) und den Ordner „gallery/“.
-          </div>
-        </div>
-      </div>
-
-      <div class="footer">
-        <span>© <span id="year"></span> Irek Halk</span>
-        <span>Science-Fiction UI</span>
-      </div>
+      <p style="margin-top:25px; font-family:'JetBrains Mono'; font-size:11px; color:var(--p); letter-spacing:3px;">INITIALIZING_SYSTEM...</p>
     </div>
   </div>
 
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <div class="lbCard">
-      <img class="lbImg" id="lbImg" alt="Bild" />
-      <div class="lbBar">
-        <small id="lbLabel">Bild</small>
-        <div style="display:flex; gap:8px;">
-          <button class="miniBtn" id="lbPrev" type="button">◀</button>
-          <button class="miniBtn" id="lbNext" type="button">▶</button>
-          <button class="miniBtn" id="lbClose" type="button">Schließen</button>
-        </div>
-      </div>
-    </div>
+  <div class="lang-switcher">
+    <div class="lang-btn active" id="btn-de" onclick="setLang('de')">DE</div>
+    <div class="lang-btn" id="btn-pl" onclick="setLang('pl')">PL</div>
+    <div class="lang-btn" id="btn-en" onclick="setLang('en')">EN</div>
   </div>
+
+  <div class="bg-web"></div>
+
+  <div class="app-container">
+    <div class="full-banner">
+      <img src="logo.png" alt="IX Design Hamburg" onerror="this.src='https://via.placeholder.com/1200x600/030408/00f2ff?text=IX+DESIGN+HAMBURG'">
+    </div>
+
+    <header>
+      <h1>IX Design Hamburg</h1>
+      
+      <!-- Big Social Icons -->
+      <div class="social-bar">
+        <a href="https://instagram.com/ixdesign.studio" class="social-icon" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://tiktok.com/@ixdesignhh" class="social-icon" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.6-4.12-1.31a6.34 6.34 0 0 1-2.22-2.02V15.5c.07 1.44-.2 2.92-.93 4.18A6.45 6.45 0 0 1 7.23 23.5c-1.57.19-3.22-.05-4.58-.87A6.5 6.5 0 0 1 .15 17.5c-.24-1.57-.05-3.23.63-4.66A6.53 6.53 0 0 1 6.41 9.24c.15-.02.3-.04.45-.04 1.25.02 2.45.47 3.44 1.24V.02z"/></svg>
+        </a>
+        <a href="https://youtube.com/@patrykvega-g7d" class="social-icon" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+      </div>
+
+      <!-- Quick Contact Grid -->
+      <div class="contact-grid">
+        <a href="tel:+4915563951803" class="contact-card">
+          <span>📞 Call</span>
+          <div>+49 15563 951803</div>
+        </a>
+        <a href="mailto:ixdesignhh@gmail.com" class="contact-card">
+          <span>📧 Email</span>
+          <div>ixdesignhh@gmail.com</div>
+        </a>
+        <a href="https://wa.me/4915563951803" class="contact-card" style="border-color: #25D366;">
+          <span style="color: #25D366;">🟢 WhatsApp</span>
+          <div>+49 15563 951803</div>
+        </a>
+      </div>
+    </header>
+
+    <span class="section-title" id="sec-title">UNSERE LEISTUNGEN</span>
+    
+    <div class="services-list" id="services-list"></div>
+
+    <footer>
+      © 2024 IX DESIGN HAMBURG // SYSTEM_LOG: SECURE
+    </footer>
+  </div>
+
+  <div id="lightbox" onclick="this.style.display='none'"><img src="" id="lb-img"></div>
 
   <script>
-    const LINKS = {
-      instagram: "https://www.instagram.com/ixdesign.studio?igsh=Y3d4YW5ndjNlcWo5",
-      tiktok: "https://www.tiktok.com/@ixdesignhh?_r=1&_t=ZG-92nsSinWzhp",
-      youtube: "https://youtube.com/@patrykvega-g7d?si=qumMPur4GXNsvgYY"
-    };
-
-    const GALLERY = [
-      "gallery/01.jpg",
-      "gallery/02.jpg",
-      "gallery/03.jpg",
-      "gallery/04.jpg",
-      "gallery/05.jpg",
-      "gallery/06.jpg"
-    ];
-
-    const I18N = {
+    const CONFIG = {
       de: {
-        langLabel: "Deutsch",
-        subtitle: "Wähle eine Plattform oder öffne die Galerie.",
-        igDesc: "Portfolio & Updates",
-        ttDesc: "Werkstatt & Behind the Scenes",
-        ytDesc: "Videos & Projekte",
-        galName: "Galerie",
-        galDesc: "Fotos & Arbeiten",
-        hint: "Tipp: Wenn du diese Seite in Instagram/TikTok/YouTube öffnest und ein Link nicht funktioniert, nutze das Menü (⋮) → „Im Browser öffnen“.",
-        galleryTitle: "Galerie",
-        gallerySub: "Tippe auf ein Bild für Vollansicht.",
-        back: "Zurück",
-        hint2: "Tipp: Wenn Bilder nicht laden, prüfe die Dateinamen (Groß/Kleinschreibung) und den Ordner „gallery/“.",
-        close: "Schließen"
+        sec: "UNSERE LEISTUNGEN",
+        contactLabels: ["Rufen", "E-Mail", "WhatsApp"],
+        services: {
+          laser: { t: "Laser & CNC", d: "Schneiden und Gravieren von Holz, Acryl i Kunststoffen. Schilder, Dekorationen, Personalisierung." },
+          druk3d: { t: "3D-Druck", d: "Prototypen, Gehäuse, technische Elemente und kurze Produktionsserien." },
+          projekt: { t: "Design", d: "3D-Modelle, Produktionsdateien (SVG, STL), Visualisierungen und Produktentwicklung." },
+          reklama: { t: "Werbung & Personalisierung", d: "Visitenkarten, Gadgets, Branding und individuelle Umsetzungen." },
+          odziez: { t: "Druck & Stickerei", d: "Sublimation, Thermotransfer und Computerstickerei auf Kleidung und Textilien." },
+          led: { t: "Dekorationen & LED", d: "Moderne Innenelemente, beleuchtete Schriftzüge, Premium-Projekte." },
+          box: { t: "Premium-Verpackungen", d: "Exklusive Schachteln und Sammlerkonstruktionen." },
+          custom: { t: "Individuelle Projekte", d: "Von der Idee bis zum fertigen Produkt – ohne Einschränkungen." }
+        }
       },
       pl: {
-        langLabel: "Polski",
-        subtitle: "Wybierz platformę albo otwórz galerię.",
-        igDesc: "Portfolio i aktualizacje",
-        ttDesc: "Warsztat i backstage",
-        ytDesc: "Filmy i projekty",
-        galName: "Galeria",
-        galDesc: "Zdjęcia i realizacje",
-        hint: "Tip: Jeśli otwierasz stronę w Instagramie/TikToku/YouTube i link nie działa, użyj menu (⋮) → „Otwórz w przeglądarce”.",
-        galleryTitle: "Galeria",
-        gallerySub: "Kliknij zdjęcie, aby otworzyć podgląd.",
-        back: "Wróć",
-        hint2: "Tip: Jeśli zdjęcia się nie ładują, sprawdź nazwy plików (wielkość liter) i folder „gallery/”.",
-        close: "Zamknij"
+        sec: "NASZE USŁUGI",
+        contactLabels: ["Zadzwoń", "E-mail", "WhatsApp"],
+        services: {
+          laser: { t: "Laser & CNC", d: "Cięcie i grawerowanie drewna, akrylu i tworzyw. Szyldy, dekoracje, personalizacja." },
+          druk3d: { t: "Druk 3D", d: "Prototypy, obudowy, elementy techniczne i krótkie serie produkcyjne." },
+          projekt: { t: "Projektowanie", d: "Modele 3D, pliki do produkcji (SVG, STL), wizualizacje i rozwój produktów." },
+          reklama: { t: "Reklama & personalizacja", d: "Wizytówki, gadżety, branding i indywidualne realizacje." },
+          odziez: { t: "Nadruki & haft", d: "Sublimacja, termotransfer i haft komputerowy na odzieży i tekstyliach." },
+          led: { t: "Dekoracje & LED", d: "Nowoczesne elementy wnętrz, podświetlane napisy, projekty premium." },
+          box: { t: "Opakowania premium", d: "Ekskluzywne pudełka i konstrukcje kolekcjonerskie." },
+          custom: { t: "Projekty indywidualne", d: "Od pomysłu do gotowego produktu — bez ograniczeń." }
+        }
       },
       en: {
-        langLabel: "English",
-        subtitle: "Choose a platform or open the gallery.",
-        igDesc: "Portfolio & updates",
-        ttDesc: "Workshop & behind the scenes",
-        ytDesc: "Videos & projects",
-        galName: "Gallery",
-        galDesc: "Photos & works",
-        hint: "Tip: If you open this page inside Instagram/TikTok/YouTube and a link doesn’t work, use the menu (⋮) → “Open in browser”.",
-        galleryTitle: "Gallery",
-        gallerySub: "Tap an image for full view.",
-        back: "Back",
-        hint2: "Tip: If images don’t load, check filename casing and the “gallery/” folder.",
-        close: "Close"
+        sec: "OUR SERVICES",
+        contactLabels: ["Call", "Email", "WhatsApp"],
+        services: {
+          laser: { t: "Laser & CNC", d: "Cutting and engraving of wood, acrylic, and plastics. Signs, decorations, personalization." },
+          druk3d: { t: "3D Printing", d: "Prototypes, housings, technical elements, and short production runs." },
+          projekt: { t: "Design", d: "3D models, production files (SVG, STL), visualizations, and product development." },
+          reklama: { t: "Advertising & Branding", d: "Business cards, gadgets, branding, and individual realizations." },
+          odziez: { t: "Prints & Embroidery", d: "Sublimation, heat transfer, and computer embroidery on clothing and textiles." },
+          led: { t: "Decorations & LED", d: "Modern interior elements, illuminated signs, and premium projects." },
+          box: { t: "Premium Packaging", d: "Exclusive boxes and collector constructions." },
+          custom: { t: "Individual Projects", d: "From idea to finished product – without limits." }
+        }
       }
     };
 
-    const $ = (s)=>document.querySelector(s);
-    $("#year").textContent = new Date().getFullYear();
+    let currentLang = 'de';
 
-    $("#btnIG").href = LINKS.instagram;
-    $("#btnTT").href = LINKS.tiktok;
-    $("#btnYT").href = LINKS.youtube;
-
-    // Theme
-    const root = document.body;
-    const savedTheme = localStorage.getItem("theme");
-    if(savedTheme) root.setAttribute("data-theme", savedTheme);
-    $("#themeBtn").addEventListener("click", ()=>{
-      const cur = root.getAttribute("data-theme") || "dark";
-      const next = cur === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
-    });
-
-    // Language default DE
-    let lang = localStorage.getItem("lang") || "de";
-    applyLang(lang);
-
-    $("#langChip").addEventListener("click", ()=>{
-      lang = (lang === "de") ? "pl" : (lang === "pl" ? "en" : "de");
-      localStorage.setItem("lang", lang);
-      applyLang(lang);
-    });
-
-    function applyLang(k){
-      const t = I18N[k] || I18N.de;
-      $("#langLabel").textContent = t.langLabel;
-      $("#subtitle").textContent = t.subtitle;
-      $("#igDesc").textContent = t.igDesc;
-      $("#ttDesc").textContent = t.ttDesc;
-      $("#ytDesc").textContent = t.ytDesc;
-      $("#galName").textContent = t.galName;
-      $("#galDesc").textContent = t.galDesc;
-      $("#hint").textContent = t.hint;
-      $("#galleryTitle").textContent = t.galleryTitle;
-      $("#gallerySub").textContent = t.gallerySub;
-      $("#backBtn").textContent = t.back;
-      $("#hint2").textContent = t.hint2;
-      $("#lbClose").textContent = t.close;
-      document.documentElement.lang = k;
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === `btn-${lang}`));
+      render();
     }
 
-    // Views
-    const viewLinks = $("#viewLinks");
-    const viewGallery = $("#viewGallery");
-    $("#btnGallery").addEventListener("click", ()=>{
-      viewLinks.classList.remove("active");
-      viewGallery.classList.add("active");
-    });
-    $("#backBtn").addEventListener("click", ()=>{
-      viewGallery.classList.remove("active");
-      viewLinks.classList.add("active");
-    });
+    function render() {
+      const data = CONFIG[currentLang];
+      document.getElementById('sec-title').innerText = data.sec;
+      
+      // Update contact labels
+      const contactSpans = document.querySelectorAll('.contact-card span');
+      contactSpans[0].innerText = "📞 " + data.contactLabels[0];
+      contactSpans[1].innerText = "📧 " + data.contactLabels[1];
+      contactSpans[2].innerText = "🟢 " + data.contactLabels[2];
 
-    // Gallery build
-    const grid = $("#galleryGrid");
-    let currentIdx = 0;
-    GALLERY.forEach((src, i)=>{
-      const div = document.createElement("div");
-      div.className = "tile";
-      const img = document.createElement("img");
-      img.loading = "lazy";
-      img.src = src;
-      img.alt = "Gallery " + (i+1);
-      div.appendChild(img);
-      div.addEventListener("click", ()=>openLightbox(i));
-      grid.appendChild(div);
-    });
-
-    // Lightbox
-    const lightbox = $("#lightbox");
-    const lbImg = $("#lbImg");
-    const lbLabel = $("#lbLabel");
-    $("#lbClose").addEventListener("click", closeLightbox);
-    $("#lbPrev").addEventListener("click", ()=>openLightbox((currentIdx-1+GALLERY.length)%GALLERY.length));
-    $("#lbNext").addEventListener("click", ()=>openLightbox((currentIdx+1)%GALLERY.length));
-    lightbox.addEventListener("click", (e)=>{ if(e.target === lightbox) closeLightbox(); });
-
-    function openLightbox(i){
-      currentIdx = i;
-      lbImg.src = GALLERY[i];
-      lbLabel.textContent = `${i+1} / ${GALLERY.length}`;
-      lightbox.classList.add("open");
-      lightbox.setAttribute("aria-hidden", "false");
+      const list = document.getElementById('services-list');
+      list.innerHTML = '';
+      Object.keys(data.services).forEach(key => {
+        const s = data.services[key];
+        const item = document.createElement('div');
+        item.className = 'service-item';
+        item.innerHTML = `
+          <div class="service-header" onclick="toggle(this)">
+            <h3>${s.t}</h3>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="service-content">
+            <p class="service-desc">${s.d}</p>
+            <div class="service-gallery">
+              <img src="img/${key}_1.jpg" class="gallery-img" onclick="pop(this.src)" onerror="this.style.display='none'">
+              <img src="img/${key}_2.jpg" class="gallery-img" onclick="pop(this.src)" onerror="this.style.display='none'">
+              <img src="img/${key}_3.jpg" class="gallery-img" onclick="pop(this.src)" onerror="this.style.display='none'">
+              <img src="img/${key}_4.jpg" class="gallery-img" onclick="pop(this.src)" onerror="this.style.display='none'">
+            </div>
+          </div>
+        `;
+        list.appendChild(item);
+      });
     }
-    function closeLightbox(){
-      lightbox.classList.remove("open");
-      lightbox.setAttribute("aria-hidden", "true");
+
+    function toggle(el) {
+      const parent = el.parentElement;
+      const active = parent.classList.contains('active');
+      document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
+      if(!active) parent.classList.add('active');
     }
+
+    function pop(src) {
+      document.getElementById('lb-img').src = src;
+      document.getElementById('lightbox').style.display = 'flex';
+    }
+
+    function startSite() {
+        document.body.classList.add('robot-open');
+        setTimeout(() => {
+          document.body.classList.add('loaded');
+          render();
+        }, 800);
+    }
+
+    window.addEventListener('load', startSite);
+    setTimeout(startSite, 4000); // Failsafe
   </script>
 </body>
 </html>
